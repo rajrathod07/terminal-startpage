@@ -67,10 +67,10 @@ Flatpak Firefox cannot access local files by default.
 1. Give directory permission by running:
 
 # Allow access to your home folder
-flatpak override --user --filesystem=home org.mozilla.firefox
+```flatpak override --user --filesystem=home org.mozilla.firefox```
 
 # Or allow access only to the project folder
-flatpak override --user --filesystem=/home/USERNAME/terminal-startpage org.mozilla.firefox
+```flatpak override --user --filesystem=/home/USERNAME/terminal-startpage org.mozilla.firefox```
 
 2. Restart Firefox
 
