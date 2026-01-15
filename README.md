@@ -36,6 +36,7 @@ You can either:
 
 ```bash
 git clone https://github.com/rajrathod07/terminal-startpage.git
+```
 
 ## 2️⃣ Open `index.html`
 
@@ -44,7 +45,7 @@ git clone https://github.com/rajrathod07/terminal-startpage.git
 3. Copy the file path URL from the browser’s address bar, for example: file:///home/user/terminal-startpage/index.html
 
 
----
+
 
 ## 3️⃣ Set as Homepage / New Tab
 
@@ -65,7 +66,6 @@ Flatpak Firefox cannot access local files by default.
 
 1. Give directory permission by running:
 
-```bash
 # Allow access to your home folder
 flatpak override --user --filesystem=home org.mozilla.firefox
 
