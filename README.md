@@ -1,5 +1,7 @@
 # Terminal Startpage
 
+![Preview](assets/Preview1.png)
+
 A terminal-style browser startpage for power users.
 
 Users can execute commands, define aliases, open URLs, and search the web using a keyboard-driven interface.
