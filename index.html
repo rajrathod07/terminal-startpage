@@ -12,11 +12,52 @@
     <div class="cursor-ring" id="cursor-ring"></div>
 
     <canvas id="matrix-canvas"></canvas>
-    <div class="bg-container">
+    <div class="bg-container" id="mesh-bg">
       <div class="mesh"></div>
       <div class="mesh-small"></div>
     </div>
     <div class="light" id="light"></div>
+
+    <div class="intro-overlay" id="introOverlay">
+      <div class="intro-box">
+        <div class="intro-header">SYSTEM_BOOT_SEQUENCE_V.9</div>
+        <div class="intro-terminal" id="introLog"></div>
+        <div class="intro-footer" id="introFooter"></div>
+      </div>
+      <button id="skipIntroBtn" class="btn-intro hidden">ACCESS SYSTEM</button>
+    </div>
+
+    <div class="root-overlay" id="rootOverlay">
+      <div class="scan-grid"></div>
+      <div class="root-terminal">
+        <div class="root-text" id="rootText">INITIATING OVERRIDE...</div>
+        <div class="root-bar-box">
+          <div class="root-bar-fill"></div>
+        </div>
+        <div class="root-codes" id="rootCodes"></div>
+      </div>
+    </div>
+
+    <div class="crash-overlay" id="crashOverlay">
+      <div class="crash-box">
+        <div class="crash-face">:(</div>
+        <h1>SYSTEM_CRASH_DETECTED</h1>
+        <p>ERROR CODE: 404_REALITY_NOT_FOUND</p>
+        <p>REBOOTING SYSTEM...</p>
+        <div class="loader"></div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="customModal">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title" id="modalTitle">NOTIFICATION</span>
+          <span class="modal-close" onclick="closeModal()">✖</span>
+        </div>
+        <div class="modal-content" id="modalMsg"></div>
+        <div class="modal-footer" id="modalFooter"></div>
+      </div>
+    </div>
 
     <div class="hack-overlay" id="hackOverlay">
       <div class="hack-log" id="hackLog"></div>
@@ -24,137 +65,230 @@
     </div>
 
     <div class="list-overlay" id="listOverlay">
-      <div class="list-header">
-        <span>ALL ALIASES</span>
-        <span class="esc-hint">[ESC] to close</span>
+      <div class="list-container">
+        <div class="list-sticky-header">
+          <div class="list-title-row">
+            <span>SYSTEM ALIAS MAP</span>
+            <span class="esc-hint">[ESC] to close</span>
+          </div>
+          <div class="list-search-row">
+            <input
+              type="text"
+              id="overlaySearch"
+              class="input-ui search-ui"
+              placeholder="Start typing to filter aliases..."
+              autocomplete="off"
+            />
+          </div>
+        </div>
+        <div class="alias-grid" id="aliasGrid"></div>
       </div>
-      <div class="alias-grid" id="aliasGrid"></div>
     </div>
 
     <div class="config-overlay" id="configOverlay">
       <div class="config-box">
-        <div class="config-header">
-          <h2>// SYSTEM CONFIGURATION</h2>
-          <span class="close-btn" id="closeConfigBtn">✖</span>
+        <div class="config-sidebar">
+          <div class="sidebar-title">SYSTEM<br />CONFIG</div>
+          <ul class="sidebar-nav">
+            <li class="active" onclick="switchTab('tab-identity')">Identity</li>
+            <li onclick="switchTab('tab-theme')">Visuals</li>
+            <li onclick="switchTab('tab-aliases')">Aliases</li>
+            <li onclick="switchTab('tab-eggs')">Easter Eggs</li>
+            <li onclick="switchTab('tab-data')">Backup</li>
+          </ul>
+          <div class="sidebar-footer">
+            <button id="closeConfigBtn" class="btn-sidebar-close">
+              EXIT SYSTEM
+            </button>
+          </div>
         </div>
 
-        <div class="config-body">
-          <div class="config-section">
-            <h3>USER IDENTITY</h3>
+        <div class="config-content">
+          <div id="tab-identity" class="config-tab active">
+            <h3>USER PROFILE</h3>
             <div class="config-grid">
               <div class="input-group-ui">
                 <label>User Name</label>
-                <input
-                  type="text"
-                  id="confName"
-                  class="input-ui"
-                  placeholder="Raj"
-                />
+                <input type="text" id="confName" class="input-ui" />
               </div>
               <div class="input-group-ui">
                 <label>Role / Subtitle</label>
-                <input
-                  type="text"
-                  id="confRole"
-                  class="input-ui"
-                  placeholder="Hacker • Coder"
-                />
+                <input type="text" id="confRole" class="input-ui" />
               </div>
               <div class="input-group-ui">
                 <label>Prompt Label</label>
-                <input
-                  type="text"
-                  id="confPrompt"
-                  class="input-ui"
-                  placeholder="user@term:~$"
-                />
+                <input type="text" id="confPrompt" class="input-ui" />
               </div>
               <div class="input-group-ui">
                 <label>Input Placeholder</label>
+                <input type="text" id="confPlace" class="input-ui" />
+              </div>
+            </div>
+          </div>
+
+          <div id="tab-theme" class="config-tab">
+            <h3>VISUAL APPEARANCE</h3>
+            <div class="input-group-ui">
+              <label>Background Animation</label>
+              <select id="confBg" class="input-ui">
+                <option value="mesh">Mesh Network (Cyber)</option>
+                <option value="matrix">Matrix Rain (Hacker)</option>
+              </select>
+            </div>
+            <div class="input-group-ui">
+              <label>System Accent Color</label>
+              <div class="color-picker-row">
+                <input type="color" id="confColor" />
+                <div
+                  class="color-preset"
+                  style="background: #00ff9c"
+                  onclick="setThemeColor('#00ff9c')"
+                ></div>
+                <div
+                  class="color-preset"
+                  style="background: #00e5ff"
+                  onclick="setThemeColor('#00e5ff')"
+                ></div>
+                <div
+                  class="color-preset"
+                  style="background: #bd00ff"
+                  onclick="setThemeColor('#bd00ff')"
+                ></div>
+                <div
+                  class="color-preset"
+                  style="background: #ff9100"
+                  onclick="setThemeColor('#ff9100')"
+                ></div>
+                <div
+                  class="color-preset"
+                  style="background: #ff0055"
+                  onclick="setThemeColor('#ff0055')"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="tab-aliases" class="config-tab">
+            <h3>SHORTCUT MANAGER</h3>
+            <div class="alias-control-panel">
+              <div class="alias-inputs">
+                <input type="hidden" id="editOriginalKey" value="" />
+                <div class="input-group-ui" style="flex: 1">
+                  <label>Key</label>
+                  <input
+                    type="text"
+                    id="newAliasKey"
+                    class="input-ui"
+                    placeholder="e.g. yt"
+                  />
+                </div>
+                <div class="input-group-ui" style="flex: 2">
+                  <label>Target URL</label>
+                  <input
+                    type="text"
+                    id="newAliasUrl"
+                    class="input-ui"
+                    placeholder="https://..."
+                  />
+                </div>
+                <div class="input-group-ui" style="justify-content: flex-end">
+                  <label>&nbsp;</label>
+                  <button id="addAliasBtn" class="btn-ui btn-add">ADD</button>
+                </div>
+              </div>
+              <div class="alias-search-row">
                 <input
                   type="text"
-                  id="confPlace"
-                  class="input-ui"
-                  placeholder="Type command..."
+                  id="aliasSearch"
+                  class="input-ui search-ui"
+                  placeholder="🔍 Search aliases..."
                 />
               </div>
-            </div>
-          </div>
-
-          <div class="config-section">
-            <h3>SYSTEM CHEATSHEET</h3>
-            <div class="cheat-container">
-              <div class="cheat-card">
-                <h4>CORE COMMANDS</h4>
-                <ul>
-                  <li><span class="cmd-hl">config</span> Settings Menu</li>
-                  <li><span class="cmd-hl">ls -a</span> Show All Aliases</li>
-                  <li><span class="cmd-hl">sudo</span> Toggle Root Mode</li>
-                  <li><span class="cmd-hl">clear</span> Clear Input</li>
-                </ul>
-              </div>
-              <div class="cheat-card">
-                <h4>VISUAL FX & SECRETS</h4>
-                <ul>
-                  <li><span class="cmd-hl">matrix</span> Matrix Rain</li>
-                  <li><span class="cmd-hl">hack</span> Hack Sim</li>
-                  <li><span class="cmd-hl">party</span> RGB Mode</li>
-                  <li><span class="cmd-hl">404</span> Glitch Effect</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="config-section">
-            <h3>ALIAS MANAGEMENT</h3>
-            <div class="add-alias-row">
-              <input
-                type="text"
-                id="newAliasKey"
-                class="input-ui"
-                placeholder="Key (e.g. yt)"
-              />
-              <input
-                type="text"
-                id="newAliasUrl"
-                class="input-ui flex-grow"
-                placeholder="URL (https://...)"
-              />
-              <button id="addAliasBtn" class="btn-ui btn-add">ADD +</button>
             </div>
             <div class="table-container">
               <table class="config-table">
                 <thead>
                   <tr>
-                    <th style="width: 20%">KEY</th>
-                    <th style="width: 60%">URL TARGET</th>
-                    <th style="width: 20%; text-align: right">ACTION</th>
+                    <th width="20%">KEY</th>
+                    <th width="50%">TARGET</th>
+                    <th width="30%" align="right">ACTIONS</th>
                   </tr>
                 </thead>
                 <tbody id="configAliasList"></tbody>
               </table>
             </div>
           </div>
+
+          <div id="tab-eggs" class="config-tab">
+            <h3>HIDDEN COMMANDS</h3>
+            <div class="table-container">
+              <table class="config-table">
+                <thead>
+                  <tr>
+                    <th width="25%">COMMAND</th>
+                    <th>EFFECT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="color: var(--green); font-weight: bold">sudo</td>
+                    <td>Grant Root Access (Advanced Override).</td>
+                  </tr>
+                  <tr>
+                    <td style="color: var(--green); font-weight: bold">404</td>
+                    <td>Container Glitch & System Crash.</td>
+                  </tr>
+                  <tr>
+                    <td style="color: var(--green); font-weight: bold">
+                      matrix
+                    </td>
+                    <td>Enables Matrix Rain background.</td>
+                  </tr>
+                  <tr>
+                    <td style="color: var(--green); font-weight: bold">hack</td>
+                    <td>Cinematic Hacking Simulation.</td>
+                  </tr>
+                  <tr>
+                    <td style="color: var(--green); font-weight: bold">
+                      party
+                    </td>
+                    <td>RGB Rainbow Cycle Mode.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="tab-data" class="config-tab">
+            <h3>DATA MANAGEMENT</h3>
+            <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 20px">
+              Backups include visual settings, aliases, and your quick links
+              layout.
+            </p>
+            <div class="data-buttons">
+              <input
+                type="file"
+                id="importFile"
+                accept=".json"
+                style="display: none"
+              />
+              <button id="exportBtn" class="btn-ui btn-secondary">
+                ⬇ EXPORT FULL BACKUP
+              </button>
+              <button id="importBtn" class="btn-ui btn-secondary">
+                ⬆ RESTORE BACKUP
+              </button>
+              <button id="resetBtn" class="btn-ui btn-danger">
+                ⚠ FACTORY RESET
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div class="config-footer">
-          <div class="footer-left">
-            <input
-              type="file"
-              id="importFile"
-              accept=".json"
-              style="display: none"
-            />
-            <button id="exportBtn" class="btn-ui btn-secondary">
-              ⬇ BACKUP
-            </button>
-            <button id="importBtn" class="btn-ui btn-secondary">
-              ⬆ RESTORE
-            </button>
-            <button id="resetBtn" class="btn-ui btn-danger">⚠ RESET</button>
-          </div>
+        <div class="config-action-bar">
+          <span class="unsaved-note">Changes are applied on reboot</span>
           <button id="saveConfigBtn" class="btn-ui btn-primary">
-            SAVE & REBOOT
+            SAVE CONFIG & REBOOT
           </button>
         </div>
       </div>
@@ -165,7 +299,7 @@
       <div class="hud-item">NET: <span class="status-ok">CONNECTED</span></div>
     </div>
     <div class="hud hud-right">
-      <div class="hud-item">CPU: <span class="status-ok">NORMAL</span></div>
+      <div class="hud-item">CPU: <span class="status-ok">STABLE</span></div>
       <div class="hud-item">SECURE: <span class="status-ok">TRUE</span></div>
     </div>
 
@@ -189,7 +323,7 @@
       </div>
     </div>
 
-    <div class="layout">
+    <div class="layout" id="mainLayout">
       <div class="main-card" id="mainCard">
         <div class="header">
           <div>
@@ -208,7 +342,7 @@
           <input
             id="cmd"
             class="input"
-            placeholder="..."
+            placeholder="Type command..."
             autocomplete="off"
             spellcheck="false"
           />
@@ -216,39 +350,28 @@
         </div>
 
         <div class="drawer">
-          <div class="fav-title">QUICK ACCESS</div>
-          <div class="fav-grid">
-            <a class="fav-card" href="https://youtube.com">
-              <svg viewBox="0 0 24 24">
+          <div class="fav-header-row">
+            <div class="fav-title" id="favTitle">QUICK ACCESS</div>
+            <div class="fav-edit-icon" id="favEditBtn" title="Edit Shortcuts">
+              <svg
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                fill="currentColor"
+              >
                 <path
-                  d="M23.5 6.2s-.2-1.6-.8-2.3c-.8-.9-1.6-.9-2-1C17.9 2.5 12 2.5 12 2.5s-5.9 0-8.7.4c-.4.1-1.2.1-2 1C.7 4.6.5 6.2.5 6.2S0 8.1 0 10v1.9c0 1.9.5 3.8.5 3.8s.2 1.6.8 2.3c.8.9 1.9.9 2.4 1 1.7.2 7.3.4 7.3.4s5.9 0 8.7-.4c.4-.1 1.2-.1 2-1 .6-.7.8-2.3.8-2.3s.5-1.9.5-3.8V10c0-1.9-.5-3.8-.5-3.8zM9.6 14.8V7.9l6.2 3.5-6.2 3.4z"
+                  d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
                 />
               </svg>
-              <span>YouTube</span>
-            </a>
-            <a class="fav-card" href="https://chat.openai.com">
-              <svg viewBox="0 0 24 24">
-                <path
-                  d="M12 2a5 5 0 015 5v1a5 5 0 010 10v1a5 5 0 01-10 0v-1a5 5 0 010-10V7a5 5 0 015-5z"
-                />
-              </svg>
-              <span>ChatGPT</span>
-            </a>
-            <a class="fav-card" href="https://github.com">
-              <svg viewBox="0 0 24 24">
-                <path
-                  d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2.2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.6-1.3-1.6-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.8-.3 1.3-.6.1-.7.4-1.1.7-1.3-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.4 1.2-3.3-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2.9-.3 1.9-.4 2.9-.4s2 .1 2.9.4c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.9 1.2 2 1.2 3.3 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"
-                />
-              </svg>
-              <span>GitHub</span>
-            </a>
+            </div>
           </div>
+          <div class="fav-grid" id="favGrid"></div>
         </div>
       </div>
     </div>
 
     <div class="corner c-left">MODE: SECURE</div>
-    <div class="corner c-right">V.3.1.5</div>
+    <div class="corner c-right">V.1.0.0</div>
 
     <script src="script.js"></script>
   </body>
