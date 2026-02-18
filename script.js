@@ -37,9 +37,9 @@ const hardcodedCommands = [
 ];
 
 let settings = JSON.parse(localStorage.getItem("terminalConfig")) || defaultSettings;
-if(!settings.quickLinks) settings.quickLinks = defaultSettings.quickLinks;
-if(!settings.themeColor) settings.themeColor = defaultSettings.themeColor;
-if(settings.firstRun === undefined) settings.firstRun = true;
+if (!settings.quickLinks) settings.quickLinks = defaultSettings.quickLinks;
+if (!settings.themeColor) settings.themeColor = defaultSettings.themeColor;
+if (settings.firstRun === undefined) settings.firstRun = true;
 
 /* =========================================
    2. DOM ELEMENTS
@@ -105,7 +105,7 @@ let isEditingFavs = false;
 function init() {
   if (settings.firstRun) runBiosIntro();
   else introOverlay.style.display = "none";
-  
+
   applyVisuals();
   renderQuickLinks();
   updateGreeting();
@@ -165,24 +165,24 @@ function showConfirm(title, msg, onYes) {
   modalTitle.textContent = title;
   modalMsg.innerHTML = msg.replace(/\n/g, "<br>");
   modalFooter.innerHTML = "";
-  
+
   const btnYes = document.createElement("button");
   btnYes.className = "btn-ui btn-danger";
   btnYes.textContent = "YES";
   btnYes.onclick = () => { closeModal(); onYes(); };
-  
+
   const btnNo = document.createElement("button");
   btnNo.className = "btn-ui btn-secondary";
   btnNo.textContent = "NO";
   btnNo.onclick = closeModal;
-  
+
   modalFooter.appendChild(btnNo);
   modalFooter.appendChild(btnYes);
-  
+
   customModal.style.display = "flex";
 }
 
-window.closeModal = function() {
+window.closeModal = function () {
   customModal.style.display = "none";
   cmd.focus();
 };
@@ -216,7 +216,7 @@ tick();
    ========================================= */
 function applyBgTheme(themeName) {
   const body = document.body;
-  if(themeName === "matrix") {
+  if (themeName === "matrix") {
     body.classList.add("bg-matrix");
     startMatrix();
   } else {
@@ -224,8 +224,8 @@ function applyBgTheme(themeName) {
     stopMatrix();
   }
 }
-window.setThemeColor = function(color) { confColor.value = color; };
-window.switchTab = function(tabId) {
+window.setThemeColor = function (color) { confColor.value = color; };
+window.switchTab = function (tabId) {
   document.querySelectorAll('.config-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.sidebar-nav li').forEach(l => l.classList.remove('active'));
   document.getElementById(tabId).classList.add('active');
@@ -251,11 +251,11 @@ function renderQuickLinks() {
       </div>
     `;
     card.onclick = (e) => {
-      if(!isEditingFavs && !e.target.closest('.mini-btn')) window.open(link.url, "_self");
+      if (!isEditingFavs && !e.target.closest('.mini-btn')) window.open(link.url, "_self");
     };
     favGrid.appendChild(card);
   });
-  if(settings.quickLinks.length < 8) {
+  if (settings.quickLinks.length < 8) {
     const addCard = document.createElement("div");
     addCard.className = "fav-card add-new";
     addCard.innerHTML = `<div class="add-plus">+</div>`;
@@ -268,7 +268,7 @@ favEditBtn.addEventListener("click", () => {
   isEditingFavs = !isEditingFavs;
   document.body.classList.toggle("editing-favs", isEditingFavs);
   favEditBtn.classList.toggle("active", isEditingFavs);
-  if(isEditingFavs) {
+  if (isEditingFavs) {
     favTitle.textContent = "/// EDIT MODE ACTIVE ///";
     favTitle.classList.add("blink-warning");
   } else {
@@ -279,25 +279,25 @@ favEditBtn.addEventListener("click", () => {
 
 function addNewQuickLink() {
   const name = prompt("Shortcut Name:");
-  if(!name) return;
+  if (!name) return;
   const url = prompt("Shortcut URL:");
-  if(!url) return;
+  if (!url) return;
   settings.quickLinks.push({ name, url });
   saveSettingsLocally();
   renderQuickLinks();
 }
-window.editQuickLink = function(index) {
+window.editQuickLink = function (index) {
   const link = settings.quickLinks[index];
   const newName = prompt("Edit Name:", link.name);
-  if(!newName) return;
+  if (!newName) return;
   const newUrl = prompt("Edit URL:", link.url);
-  if(!newUrl) return;
+  if (!newUrl) return;
   settings.quickLinks[index] = { name: newName, url: newUrl };
   saveSettingsLocally();
   renderQuickLinks();
 };
 
-window.deleteQuickLink = function(index) {
+window.deleteQuickLink = function (index) {
   showConfirm("DELETE SHORTCUT", "Remove this link?", () => {
     settings.quickLinks.splice(index, 1);
     saveSettingsLocally();
@@ -314,22 +314,22 @@ let selectedIndex = 0;
 cmd.addEventListener("input", () => {
   const v = cmd.value.toLowerCase();
   suggest.innerHTML = ""; matches = []; selectedIndex = 0;
-  
+
   if (!v) { suggest.style.display = "none"; return; }
-  
+
   const sysMatches = hardcodedCommands.filter(c => c.key.startsWith(v));
   sysMatches.forEach(c => matches.push({ key: c.key, desc: c.desc, type: 'sys' }));
-  
+
   const aliasMatches = Object.keys(settings.aliases).filter(k => k.includes(v));
   aliasMatches.forEach(k => matches.push({ key: k, desc: settings.aliases[k], type: 'alias' }));
 
-  if(matches.length > 0) {
+  if (matches.length > 0) {
     matches.forEach((m, i) => {
       const d = document.createElement("div");
       d.innerHTML = `<span>${m.key}</span><span class="cmd-desc">${m.desc}</span>`;
       if (i === 0) d.classList.add("active");
       d.onclick = () => {
-        if(m.type === 'sys') checkCommand(m.key);
+        if (m.type === 'sys') checkCommand(m.key);
         else openLink(m.key);
       };
       suggest.appendChild(d);
@@ -359,7 +359,7 @@ cmd.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     if (matches.length && suggest.style.display !== "none") {
       const m = matches[selectedIndex];
-      if(m.type === 'sys') checkCommand(m.key);
+      if (m.type === 'sys') checkCommand(m.key);
       else openLink(m.key);
     } else {
       checkCommand(cmd.value);
@@ -378,18 +378,18 @@ function updateSelection() {
 function checkCommand(v) {
   v = v.trim().toLowerCase();
   suggest.style.display = "none";
-  
+
   if (v === "config") { openConfig(); cmd.value = ""; return; }
   if (v === "ls -a") { openListOverlay(); cmd.value = ""; return; }
   if (v === "help") { showModal("COMMANDS", "config, ls -a, sudo, matrix, hack, party, 404"); cmd.value = ""; return; }
-  
+
   // EASTER EGGS
   if (v === "sudo") { activateRootMode(); cmd.value = ""; return; }
   if (v === "404") { activate404(); cmd.value = ""; return; }
   if (v === "matrix") { settings.theme = "matrix"; applyBgTheme("matrix"); saveSettingsLocally(); cmd.value = ""; return; }
   if (v === "hack") { startHack(); cmd.value = ""; return; }
   if (v === "party") { document.body.classList.toggle("party-mode"); cmd.value = ""; return; }
-  
+
   openLink(v);
 }
 
@@ -411,14 +411,14 @@ function activateRootMode() {
   rootOverlay.classList.add("active");
   rootText.textContent = "INITIALIZING...";
   rootCodes.innerHTML = "";
-  
+
   let i = 0;
   let interval = setInterval(() => {
     rootCodes.innerHTML += Math.random().toString(16).substring(2, 15) + " ";
     i++;
-    if(i > 10) rootText.textContent = "BYPASSING FIREWALL...";
-    if(i > 20) rootText.textContent = "OVERRIDING SECURITY...";
-    if(i > 30) {
+    if (i > 10) rootText.textContent = "BYPASSING FIREWALL...";
+    if (i > 20) rootText.textContent = "OVERRIDING SECURITY...";
+    if (i > 30) {
       clearInterval(interval);
       rootText.textContent = "ACCESS GRANTED";
       setTimeout(() => {
@@ -459,7 +459,7 @@ function closeConfig() { configOverlay.style.display = "none"; cmd.focus(); }
 function renderConfigAliases(filter = "") {
   configAliasList.innerHTML = "";
   let keys = Object.keys(settings.aliases).sort();
-  if(filter) keys = keys.filter(k => k.includes(filter) || settings.aliases[k].includes(filter));
+  if (filter) keys = keys.filter(k => k.includes(filter) || settings.aliases[k].includes(filter));
 
   keys.forEach(key => {
     const tr = document.createElement("tr");
@@ -481,7 +481,7 @@ addAliasBtn.addEventListener("click", () => {
   const key = newAliasKey.value.trim().toLowerCase();
   const url = newAliasUrl.value.trim();
   const originalKey = editOriginalKey.value;
-  
+
   if (!key || !url) { showModal("ERROR", "Key and URL are required."); return; }
   if (!originalKey && settings.aliases[key]) { showModal("ERROR", `Alias '${key}' already exists!`); return; }
   if (originalKey && key !== originalKey && settings.aliases[key]) { showModal("ERROR", `Alias '${key}' already exists!`); return; }
@@ -492,7 +492,7 @@ addAliasBtn.addEventListener("click", () => {
   renderConfigAliases();
 });
 
-window.prepareEditAlias = function(key) {
+window.prepareEditAlias = function (key) {
   newAliasKey.value = key;
   newAliasUrl.value = settings.aliases[key];
   editOriginalKey.value = key;
@@ -507,7 +507,7 @@ function resetAliasInputs() {
   addAliasBtn.textContent = "ADD";
   addAliasBtn.classList.remove("update-mode");
 }
-window.removeAlias = function(key) {
+window.removeAlias = function (key) {
   showConfirm("DELETE ALIAS", `Are you sure you want to delete '${key}'?`, () => {
     delete settings.aliases[key];
     renderConfigAliases(aliasSearch.value.toLowerCase());
@@ -586,16 +586,16 @@ function startMatrix() {
   if (matrixInterval) return;
   columns = matrixCanvas.width / fontSize;
   drops = [];
-  for(let i=0; i<columns; i++) drops[i] = 1;
+  for (let i = 0; i < columns; i++) drops[i] = 1;
   matrixInterval = setInterval(() => {
     ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
     ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
     ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--green");
     ctx.font = fontSize + "px monospace";
-    for(let i=0; i<drops.length; i++) {
+    for (let i = 0; i < drops.length; i++) {
       const text = charArr[Math.floor(Math.random() * charArr.length)];
-      ctx.fillText(text, i*fontSize, drops[i]*fontSize);
-      if(drops[i]*fontSize > matrixCanvas.height && Math.random() > 0.975) drops[i] = 0;
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) drops[i] = 0;
       drops[i]++;
     }
   }, 50);
@@ -611,7 +611,7 @@ function startHack() {
   const log = document.getElementById("hackLog");
   const msg = document.getElementById("hackMsg");
   overlay.style.display = "flex"; log.innerHTML = ""; msg.style.display = "none";
-  
+
   const hackText = [
     "Initializing Brute Force Attack...",
     "Bypassing Firewall...",
@@ -628,10 +628,10 @@ function startHack() {
     log.innerHTML += `[${randHex}] ${hackText[i % hackText.length]}\n`;
     log.scrollTop = log.scrollHeight;
     i++;
-    if(i > 25) { 
-      clearInterval(interval); 
-      msg.style.display="block"; 
-      setTimeout(()=>overlay.style.display="none", 2000); 
+    if (i > 25) {
+      clearInterval(interval);
+      msg.style.display = "block";
+      setTimeout(() => overlay.style.display = "none", 2000);
     }
   }, 100);
 }
@@ -645,14 +645,14 @@ function openListOverlay() {
 function renderOverlayList(filter = "") {
   overlayGrid.innerHTML = "";
   let keys = Object.keys(settings.aliases).sort();
-  if(filter) {
+  if (filter) {
     keys = keys.filter(k => k.includes(filter) || settings.aliases[k].includes(filter));
   }
   keys.forEach(k => {
     const d = document.createElement("div");
     d.className = "alias-item";
     d.innerHTML = `<span class="alias-key">${k}</span><span class="alias-url">${settings.aliases[k]}</span>`;
-    d.onclick = () => { openLink(k); listOverlay.style.display="none"; };
+    d.onclick = () => { openLink(k); listOverlay.style.display = "none"; };
     overlayGrid.appendChild(d);
   });
 }

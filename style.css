@@ -35,7 +35,9 @@ body {
   font-family: var(--font-mono);
   color: var(--green);
   overflow: hidden;
-  transition: color 0.3s, filter 0.3s;
+  transition:
+    color 0.3s,
+    filter 0.3s;
 }
 
 /* PARTY MODE */
@@ -225,7 +227,8 @@ body.root-mode {
 /* 3. 404 CRASH SYSTEM (2 PHASES) */
 /* Phase 1: Container Glitch */
 .container-glitch {
-  animation: shake 0.2s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite,
+  animation:
+    shake 0.2s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite,
     rgbSplit 0.1s infinite;
 }
 @keyframes shake {
@@ -474,11 +477,13 @@ body.root-mode {
   inset: -50%;
   width: 200%;
   height: 200%;
-  background-image: linear-gradient(var(--green-dim) 1px, transparent 1px),
+  background-image:
+    linear-gradient(var(--green-dim) 1px, transparent 1px),
     linear-gradient(90deg, var(--green-dim) 1px, transparent 1px);
   background-size: 60px 60px;
   transform: rotate(15deg);
-  animation: meshMove 20s linear infinite,
+  animation:
+    meshMove 20s linear infinite,
     meshPulse 4s ease-in-out infinite alternate;
 }
 .mesh-small {
@@ -486,10 +491,8 @@ body.root-mode {
   inset: -50%;
   width: 200%;
   height: 200%;
-  background-image: linear-gradient(
-      rgba(255, 255, 255, 0.03) 1px,
-      transparent 1px
-    ),
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 15px 15px;
   transform: rotate(15deg);
@@ -590,7 +593,9 @@ body.bg-matrix .bg-container {
   top: 50%;
   transform: translateY(-50%);
   z-index: 4;
-  transition: transform 0.3s var(--anim-ease), opacity 0.3s var(--anim-ease);
+  transition:
+    transform 0.3s var(--anim-ease),
+    opacity 0.3s var(--anim-ease);
 }
 .edge-left {
   left: 0;

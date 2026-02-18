@@ -1,0 +1,50 @@
+{
+  "userName": "Raj",
+  "userRole": "Hacker • Coder • Security Learner",
+  "promptLabel": "raj@terminal:~$",
+  "inputPlaceholder": "Type alias or URL...",
+  "aliases": {
+    "yt": "https://youtube.com",
+    "li": "https://linkedin.com",
+    "rd": "https://reddit.com",
+    "dm": "https://discord.com",
+    "pin": "https://pinterest.com",
+    "gg": "https://google.com",
+    "ddg": "https://duckduckgo.com",
+    "ref": "http://localhost/Project/",
+    "php": "http://localhost/phpmyadmin/",
+    "cisco": "https://www.netacad.com/dashboard",
+    "w3s": "https://w3schools.com",
+    "gc": "https://classroom.google.com",
+    "gh": "https://github.com",
+    "gpt": "https://chat.openai.com",
+    "thm": "https://tryhackme.com",
+    "htb": "https://hackthebox.com",
+    "ctf": "https://ctftime.org",
+    "owasp": "https://owasp.org",
+    "vulnweb": "http://www.vulnweb.com/",
+    "nvd": "https://nvd.nist.gov",
+    "cve": "https://cve.mitre.org",
+    "dir": "https://drive.google.com/drive/my-drive",
+    "dir1": "https://drive.google.com/drive/u/1/my-drive",
+    "mail": "https://mail.google.com",
+    "gemini": "https://gemini.google.com"
+  },
+  "quickLinks": [
+    {
+      "name": "YouTube",
+      "url": "https://youtube.com"
+    },
+    {
+      "name": "ChatGPT",
+      "url": "https://chat.openai.com"
+    },
+    {
+      "name": "GitHub",
+      "url": "https://github.com"
+    }
+  ],
+  "themeColor": "#00ff9c",
+  "firstRun": false,
+  "theme": "mesh"
+}
