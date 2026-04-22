@@ -19,4 +19,3 @@
 ## Warning
 Clearing browser data deletes customization.
 Always keep a backup.
-
