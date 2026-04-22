@@ -108,6 +108,3 @@ Restore:
 | `github`      | Open aliased site  |
 | `example.com` | Open URL           |
 | `random text` | DuckDuckGo search  |
-
-
-
